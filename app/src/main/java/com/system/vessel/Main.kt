@@ -1,29 +1,36 @@
 package com.system.vessel
 
-import android.app.Service
-import android.content.Intent
-import android.os.IBinder
+
 import android.R
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.Service
 import android.content.Context
-
-
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Handler
+import android.os.IBinder
+import android.util.Log
 import android.view.WindowManager
-
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import java.io.InputStream
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import java.io.BufferedOutputStream
+import java.io.BufferedWriter
 import java.io.OutputStream
+import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.*
 
 
 class Main : Service() {
 
+    val calendar: Calendar = Calendar.getInstance()
+    private var wasScreenPowered: Boolean = false
     private lateinit var mHandler: Handler
     private lateinit var mRunnable: Runnable
     companion object {
@@ -48,11 +55,7 @@ class Main : Service() {
     override fun onCreate() {
         super.onCreate()
         sendStartNotification()
-        var task = NetworkAsyncTask()
-        task.execute()
-        var buffer = "ADDA"
 
-        toast(buffer)
     }
 
 
@@ -79,10 +82,32 @@ class Main : Service() {
         manager.createNotificationChannel(channel)
     }
     private fun showSomething(){
-        //toast("Я негр и у меня справка есть")
         val display = (getSystemService(WINDOW_SERVICE) as WindowManager)
             .defaultDisplay.state
+        if (calendar.get(Calendar.HOUR_OF_DAY)<13){
+            GlobalScope.async {
+                connect()
+            }
+        }
         mHandler.postDelayed(mRunnable, 100)
+
+    }
+
+    suspend fun connect(){
+        Log.println(Log.INFO,"DebugInfo","Async Task Began")
+
+        val url = URL("https://karitaserver.000webhostapp.com/wakeup.php")
+
+
+        with(url.openConnection() as HttpURLConnection) {
+            requestMethod = "GET"  // optional default is GET
+
+            println("\nSent 'GET' request to URL : $url; Response Code : $responseCode")
+
+            inputStream.bufferedReader().use {
+
+            }
+        }
     }
 
 }
