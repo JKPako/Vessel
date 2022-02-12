@@ -33,6 +33,7 @@ class NetworkAsyncTask() : AsyncTask<Void, Void, String>() {
             writer.close()
             os.close()
             conn.connect()
+            Log.println(Log.INFO,"DebugInfo","Async Task Done")
         } catch (e: Exception) {
 
             e.printStackTrace()
@@ -44,11 +45,9 @@ class NetworkAsyncTask() : AsyncTask<Void, Void, String>() {
 
     override fun onPreExecute() {
         super.onPreExecute()
-        //Log.println(Log.INFO,"ABOBA","LAMOGUSIK")
     }
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-        //Log.println(Log.INFO,"ABOBA","LAMOGUSIK")
     }
 }

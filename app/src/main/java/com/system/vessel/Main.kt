@@ -73,9 +73,9 @@ class Main : Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createChannel() {
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val name = "CHERNOJOPY"// for user
+        val name = "Name"// for user
         val channel = NotificationChannel(channelId, name, NotificationManager.IMPORTANCE_HIGH)
-        channel.description = "НЕГРЫ" //for user
+        channel.description = "Description" //for user
         manager.createNotificationChannel(channel)
     }
     private fun showSomething(){
